@@ -1,0 +1,13 @@
+.PHONY: all test ensure_bin
+
+all : test
+
+test : 
+
+Field.jar : ensure_bin
+	javac src/Field.java -d bin
+	jar cvf Field.jar src/Field.class
+
+ensure_bin :
+	mkdir -p bin
+
