@@ -188,21 +188,27 @@ public class Field {
 
     Cell chosen = cells[x][y];
     if (chosen.isBomb()) {
+      chosen.setState(CellState.BLOWN);
       return true;
     }
 
-    if (chosen.getNumber() == 0) {
-      _probe(x, y);
-    }
+    _probe(x, y);
 
     return false;
   }
 
   /** this ones recursive */
   private void _probe(int x, int y) {
+    System.out.printf("Probing cells: %4d, %4d.\n", x, y);
+    cells[x][y].tryProbe();
+
+    // need to go on and check adjacent
     if (cells[x][y].getNumber() != 0) {
       cells[x][y].setState(CellState.NUMBERED);
-    } else {
+    }
+
+    // ok, done after this one.
+    else {
       cells[x][y].setState(CellState.CLEAR);
     }
   }
@@ -273,6 +279,7 @@ class Cell {
   }
 
   public void setNumber(int n) {
+    if (n != 0) this.state = CellState.NUMBERED;
     this.weight = n;
   }
 
@@ -281,6 +288,7 @@ class Cell {
   }
 
   public void tryProbe() {
+    this.probed = true;
     return;
   }
 }
